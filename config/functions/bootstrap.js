@@ -24,7 +24,7 @@ module.exports = async () => {
 
       // Listening for chat event
       socket.on("chat", function (data) {
-        // dbService.addMessage(data);
+        strapi.services.message.create(data);
         io.sockets.emit("chat", data);
       });
 
