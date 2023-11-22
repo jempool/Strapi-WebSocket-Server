@@ -10,6 +10,7 @@
     "strapi": "strapi"
   },
   "dependencies": {
+    "jsonwebtoken": "^9.0.2",
     "knex": "0.21.18",
     "mongoose": "^8.0.1",
     "socket.io": "^4.7.2",

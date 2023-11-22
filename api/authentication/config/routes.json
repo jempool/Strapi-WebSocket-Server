@@ -1,0 +1,14 @@
+{
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "handler": "authentication.login",
+      "config": {
+        "config": {
+          "controllers": ["api::authentication::authentication"]
+        }
+      }
+    }
+  ]
+}
