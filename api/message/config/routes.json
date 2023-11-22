@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/chat/history",
+      "handler": "message.find",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
