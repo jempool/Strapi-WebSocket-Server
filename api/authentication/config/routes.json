@@ -19,6 +19,16 @@
           "controllers": ["api::authentication::authentication"]
         }
       }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/refresh",
+      "handler": "authentication.refreshToken",
+      "config": {
+        "config": {
+          "controllers": ["api::authentication::authentication"]
+        }
+      }
     }
   ]
 }

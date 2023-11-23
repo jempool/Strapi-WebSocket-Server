@@ -8,14 +8,13 @@ module.exports = {
       // Validate the user's credentials
       const _user = await strapi.plugins['users-permissions'].services.user.fetch({ email });
       const validPassword = await strapi.plugins['users-permissions'].services.user.validatePassword(password, _user.password);
-
       if (!validPassword) {
         return ctx.send({ error: 'Invalid credentials' }, 401);
       }
 
       const user = { name: _user.username, email }
-      const accessToken = strapi.plugins['users-permissions'].services.jwt.issue({ id: _user.id, user });
-      const refreshToken = jwt.sign({ id: _user.id, user }, process.env.JWT_SECRET, { expiresIn: '1d' });
+      const accessToken = jwt.sign({ id: _user.id, user }, process.env.JWT_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+      const refreshToken = jwt.sign({ id: _user.id, user }, process.env.JWT_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
 
       return ctx.send({ user, accessToken, refreshToken });
     } catch (error) {
@@ -47,15 +46,33 @@ module.exports = {
       };
 
       const newUser = await strapi.plugins['users-permissions'].services.user.add(payload);
-
       const user = { name, email }
-      const accessToken = strapi.plugins['users-permissions'].services.jwt.issue({ id: newUser.id, user });
-      const refreshToken = jwt.sign({ id: newUser.id, user }, process.env.JWT_SECRET, { expiresIn: '1d' });
+      const accessToken = jwt.sign({ id: newUser.id, user }, process.env.JWT_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+      const refreshToken = jwt.sign({ id: newUser.id, user }, process.env.JWT_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
 
       return ctx.send({ user, accessToken, refreshToken });
     } catch (error) {
       console.log(error);
       return ctx.send({ message: 'Incorrect email or password.' }, 400);
+    }
+  },
+
+  async refreshToken(ctx) {
+    try {
+      const { email, refreshToken } = ctx.request.body;
+      const token = jwt.verify(refreshToken, process.env.JWT_SECRET);
+      const isValid = token.user.email === email;
+      if (!isValid) {
+        return ctx.send({ message: 'Invalid token, try login again.' }, 401);
+      }
+
+      const user = { name: token.user.name, email: token.user.email };
+      const accessToken = jwt.sign({ id: token.id, user }, process.env.JWT_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+
+      return ctx.send({ user, accessToken });
+    } catch (error) {
+      console.log(error);
+      return ctx.send({ message: 'Invalid token, try login again' }, 401);
     }
   }
 };
