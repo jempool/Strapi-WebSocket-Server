@@ -6,7 +6,7 @@ module.exports = ({ env }) => ({
       settings: {
         host: '0.0.0.0',
         port: 27017,
-        database: 'real-time_chat',
+        database: 'real-time_chat_strapi',
       },
     },
   },
