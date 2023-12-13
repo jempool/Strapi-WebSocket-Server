@@ -3,32 +3,17 @@
     {
       "method": "POST",
       "path": "/auth/login",
-      "handler": "authentication.login",
-      "config": {
-        "config": {
-          "controllers": ["api::authentication::authentication"]
-        }
-      }
+      "handler": "authentication.login"
     },
     {
       "method": "POST",
       "path": "/auth/signup",
-      "handler": "authentication.signup",
-      "config": {
-        "config": {
-          "controllers": ["api::authentication::authentication"]
-        }
-      }
+      "handler": "authentication.signup"
     },
     {
       "method": "POST",
       "path": "/auth/refresh",
-      "handler": "authentication.refreshToken",
-      "config": {
-        "config": {
-          "controllers": ["api::authentication::authentication"]
-        }
-      }
+      "handler": "authentication.refreshToken"
     }
   ]
 }
